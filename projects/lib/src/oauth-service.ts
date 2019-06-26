@@ -249,7 +249,7 @@ export class OAuthService extends AuthConfig implements OnDestroy {
 
     protected validateUrlForHttps(url: string): boolean {
         if (!url) {
-            return true;
+            return false;
         }
 
         const lcUrl = url.toLowerCase();

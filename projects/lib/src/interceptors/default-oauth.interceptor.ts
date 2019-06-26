@@ -26,11 +26,15 @@ export class DefaultOAuthInterceptor implements HttpInterceptor {
     return !!found;
   }
 
-  public intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-    const url = req.url.toLowerCase();
+    public intercept(
+        req: HttpRequest<any>,
+        next: HttpHandler
+    ): Observable<HttpEvent<any>> {
+        const url = req.url;
+        if (!url) {
+          next.handle(req);
+        }
+        const lcUrl = url.toLowerCase();
 
     if (!this.moduleConfig) {
       return next.handle(req);
@@ -38,7 +42,7 @@ export class DefaultOAuthInterceptor implements HttpInterceptor {
     if (!this.moduleConfig.resourceServer) {
       return next.handle(req);
     }
-    if (this.moduleConfig.resourceServer.allowedUrls && !this.checkUrl(url)) {
+        if (this.moduleConfig.resourceServer.allowedUrls && !this.checkUrl(lcUrl)) {
       return next.handle(req);
     }
 
